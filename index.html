@@ -2,9 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Product Listing - 12 Items</title>
+    <title>Gamyam Product Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <style>
+      :root {
+        --bg: #f3f4f6;
+        --sidebar-bg: #ffffff;
+        --primary: #10b981;
+        --primary-soft: rgba(16, 185, 129, 0.12);
+        --primary-dark: #059669;
+        --accent: #f97316;
+        --text-main: #111827;
+        --text-muted: #6b7280;
+        --border-subtle: #e5e7eb;
+        --card-bg: #ffffff;
+        --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.06);
+      }
+
       * {
         box-sizing: border-box;
         margin: 0;
@@ -14,471 +29,569 @@
       body {
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
           sans-serif;
-        background: #f3f4f6;
-        color: #111827;
-      }
-
-      .page {
+        background: var(--bg);
+        color: var(--text-main);
         min-height: 100vh;
         display: flex;
+      }
+
+      .app-shell {
+        display: flex;
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 230px;
+        background: var(--sidebar-bg);
+        border-right: 1px solid var(--border-subtle);
+        padding: 18px 16px;
+        display: flex;
         flex-direction: column;
+        gap: 18px;
       }
 
-      header {
-        background: #111827;
-        color: #f9fafb;
-        padding: 16px 20px;
-        position: sticky;
-        top: 0;
-        z-index: 10;
+      .main {
+        flex: 1;
+        padding: 14px 18px 40px;
       }
 
-      .header-inner {
-        max-width: 1100px;
-        margin: 0 auto;
+      .brand {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 16px;
+        gap: 10px;
+        margin-bottom: 8px;
       }
 
-      .logo {
-        font-size: 20px;
-        font-weight: 700;
-        letter-spacing: 0.03em;
-      }
-
-      .tagline {
-        font-size: 12px;
-        opacity: 0.8;
-      }
-
-      main {
-        flex: 1;
-        max-width: 1100px;
-        margin: 20px auto 32px;
-        padding: 0 16px;
-      }
-
-      .page-title {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: 8px;
-        margin-bottom: 18px;
-      }
-
-      .page-title h1 {
-        font-size: 24px;
-        font-weight: 700;
-      }
-
-      .page-title p {
-        font-size: 13px;
-        color: #6b7280;
-      }
-
-      .products-grid {
-        display: grid;
-        grid-template-columns: repeat(1, minmax(0, 1fr));
-        gap: 16px;
-      }
-
-      @media (min-width: 600px) {
-        .products-grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
-
-      @media (min-width: 900px) {
-        .products-grid {
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-        }
-      }
-
-      .card {
-        background: #ffffff;
+      .brand-logo {
+        width: 34px;
+        height: 34px;
         border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+        background: radial-gradient(circle at 30% 20%, #a7f3d0, #047857);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: white;
+        font-size: 20px;
+      }
+
+      .nav {
         display: flex;
         flex-direction: column;
-        transition: transform 0.18s ease, box-shadow 0.18s ease,
-          translate 0.18s ease;
+        gap: 6px;
+        margin-top: 10px;
+      }
+
+      .nav-item {
+        padding: 8px 10px;
+        border-radius: 10px;
+        font-size: 14px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: 0.18s ease;
+      }
+
+      .nav-item:hover {
+        background: #f3f4ff;
+        color: var(--text-main);
+        transform: translateX(2px);
+      }
+
+      .nav-item.active {
+        background: var(--primary-soft);
+        color: var(--primary-dark);
+        font-weight: 600;
+      }
+
+      /* Header */
+      .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .welcome-block h1 {
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .welcome-pill {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: var(--primary-soft);
+        color: var(--primary-dark);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+      }
+
+      .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .search-wrap {
+        position: relative;
+        min-width: 180px;
+      }
+
+      .search-wrap input {
+        width: 100%;
+        padding: 8px 8px 8px 26px;
+        border-radius: 999px;
+        border: 1px solid var(--border-subtle);
+        font-size: 13px;
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.7;
+        font-size: 12px;
+      }
+
+      .toggle-group {
+        display: inline-flex;
+        padding: 2px;
+        background: #e5e7eb;
+        border-radius: 999px;
+      }
+
+      .toggle-btn {
+        border: none;
+        background: transparent;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
         cursor: pointer;
       }
 
-      .card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 16px 30px rgba(15, 23, 42, 0.16);
+      .toggle-btn.active {
+        background: white;
+        box-shadow: 0 1px 4px rgba(15, 23, 42, 0.12);
       }
 
-      .card-image-wrap {
-        position: relative;
-        padding-top: 70%;
-        overflow: hidden;
-      }
-
-      .card img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-      }
-
-      .card:hover img {
-        transform: scale(1.05);
-      }
-
-      .badge {
-        position: absolute;
-        top: 8px;
-        left: 8px;
-        background: rgba(15, 118, 110, 0.9);
-        color: #ecfeff;
-        font-size: 10px;
-        padding: 4px 8px;
+      .primary-btn {
+        border: none;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        padding: 7px 12px;
         border-radius: 999px;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
       }
 
-      .card-body {
-        padding: 10px 12px 12px;
+      /* Cards */
+      .dashboard-shell {
+        display: grid;
+        grid-template-columns: 2fr 1.2fr;
+        gap: 14px;
+      }
+
+      .card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 14px;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid rgba(148, 163, 184, 0.18);
+      }
+
+      /* Grid Cards */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 10px;
+        margin-top: 4px;
+      }
+
+      .product-card {
+        background: #ffffff;
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+        transition: 0.16s ease;
+      }
+
+      .product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 28px rgba(15, 23, 42, 0.18);
+      }
+
+      .product-image {
+        width: 100%;
+        height: 115px;
+        object-fit: cover;
+      }
+
+      .product-body {
+        padding: 8px 9px 9px;
         display: flex;
         flex-direction: column;
         gap: 4px;
       }
 
+      .product-category {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
       .product-name {
         font-size: 13px;
         font-weight: 600;
-        color: #111827;
-        line-height: 1.3;
-        min-height: 34px;
       }
 
       .product-meta {
         display: flex;
-        align-items: center;
         justify-content: space-between;
-        margin-top: 4px;
-      }
-
-      .price {
-        font-size: 14px;
-        font-weight: 700;
-        color: #0f766e;
-      }
-
-      .old-price {
-        font-size: 11px;
-        text-decoration: line-through;
-        color: #9ca3af;
-        margin-left: 4px;
-      }
-
-      .discount {
-        font-size: 11px;
-        color: #b91c1c;
-        font-weight: 600;
-      }
-
-      .rating {
-        font-size: 11px;
-        color: #f59e0b;
-      }
-
-      .rating span {
-        color: #6b7280;
-      }
-
-      footer {
-        text-align: center;
         font-size: 12px;
-        color: #9ca3af;
-        padding: 16px 0 20px;
+      }
+
+      .tag-row {
+        display: flex;
+        gap: 3px;
+        flex-wrap: wrap;
+      }
+
+      .tag-pill {
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 999px;
+        background: #f3f4ff;
+        color: #4b5563;
+      }
+
+      .edit-pill {
+        font-size: 11px;
+        padding: 3px 8px;
+        border: none;
+        border-radius: 999px;
+        background: #ecfdf5;
+        color: var(--primary-dark);
+        cursor: pointer;
+      }
+
+      /* Full screen detail sheet */
+      .detail-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.6);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        z-index: 60;
+      }
+
+      .detail-panel {
+        width: 100%;
+        max-width: 480px;
+        background: white;
+        border-radius: 18px 18px 0 0;
+        padding: 14px 16px 18px;
+        box-shadow: 0 -18px 45px rgba(15, 23, 42, 0.55);
+        animation: slideUpSheet 0.25s ease-out forwards;
+        max-height: 92vh;
+        overflow-y: auto;
+      }
+
+      @keyframes slideUpSheet {
+        from {
+          transform: translateY(100%);
+        }
+        to {
+          transform: translateY(0%);
+        }
+      }
+
+      @media (max-width: 900px) {
+        .sidebar {
+          display: none;
+        }
+        .dashboard-shell {
+          grid-template-columns: 1fr;
+        }
+        .main {
+          padding: 10px 10px 40px;
+        }
       }
     </style>
+
+    <!-- React + Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   </head>
+
   <body>
-    <div class="page">
-      <header>
-        <div class="header-inner">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-logo">g</div>
           <div>
-            <div class="logo">Product Catalog</div>
-            <div class="tagline">12 Products • Online Images • No Folders</div>
+            <div class="brand-text-main">Gamyam Console</div>
+            <div class="brand-text-sub">Product management</div>
           </div>
         </div>
-      </header>
 
-      <main>
-        <div class="page-title">
-          <h1>Featured Products</h1>
-          <p>Exactly 12 cards, each using an online image URL.</p>
-        </div>
+        <nav class="nav">
+          <div class="nav-item active"><span>🏠</span> Dashboard</div>
+          <div class="nav-item"><span>📦</span> Products</div>
+          <div class="nav-item"><span>➕</span> Add Product</div>
+          <div class="nav-item"><span>⚙️</span> Settings</div>
+        </nav>
+      </aside>
 
-        <section class="products-grid">
-          <!-- Product 1 -->
-          <article class="card">
-            <div class="card-image-wrap">
-              <img
-                src="https://images.pexels.com/photos/325153/pexels-photo-325153.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Black modern headphones"
-              />
-              <span class="badge">New</span>
-            </div>
-            <div class="card-body">
-              <h2 class="product-name">Wireless Over-Ear Headphones</h2>
-              <div class="product-meta">
-                <div>
-                  <span class="price">₹2,999</span>
-                  <span class="old-price">₹3,999</span>
-                </div>
-                <div class="rating">★ 4.5 <span>(320)</span></div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Product 2 -->
-          <article class="card">
-            <div class="card-image-wrap">
-              <img
-                src="https://images.pexels.com/photos/18104/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=600"
-                alt="Laptop on desk"
-              />
-              <span class="badge">Featured</span>
-            </div>
-            <div class="card-body">
-              <h2 class="product-name">14&quot; Slim Laptop Sleeve</h2>
-              <div class="product-meta">
-                <div>
-                  <span class="price">₹799</span>
-                  <span class="old-price">₹999</span>
-                </div>
-                <div class="rating">★ 4.2 <span>(210)</span></div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Product 3 -->
-          <article class="card">
-            <div class="card-image-wrap">
-              <img
-                src="https://images.pexels.com/photos/845434/pexels-photo-845434.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Smartwatch closeup"
-              />
-              <span class="badge">Best Seller</span>
-            </div>
-            <div class="card-body">
-              <h2 class="product-name">Fitness Smartwatch with Heart Monitor</h2>
-              <div class="product-meta">
-                <div>
-                  <span class="price">₹4,499</span>
-                  <span class="old-price">₹5,999</span>
-                </div>
-                <div class="rating">★ 4.7 <span>(1,024)</span></div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Product 4 -->
-          <article class="card">
-            <div class="card-image-wrap">
-              <img
-                src="https://images.pexels.com/photos/1302881/pexels-photo-1302881.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Casual sneakers"
-              />
-              <span class="badge">Limited</span>
-            </div>
-            <div class="card-body">
-              <h2 class="product-name">Everyday Lightweight Sneakers</h2>
-              <div class="product-meta">
-                <div>
-                  <span class="price">₹1,899</span>
-                  <span class="old-price">₹2,499</span>
-                </div>
-                <div class="rating">★ 4.3 <span>(540)</span></div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Product 5 -->
-          <article class="card">
-            <div class="card-image-wrap">
-              <img
-                src="https://images.pexels.com/photos/3738730/pexels-photo-3738730.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Backpack on chair"
-              />
-              <span class="badge">Offer</span>
-            </div>
-            <div class="card-body">
-              <h2 class="product-name">Water-Resistant Travel Backpack</h2>
-              <div class="product-meta">
-                <div>
-                  <span class="price">₹1,499</span>
-                  <span class="old-price">₹2,199</span>
-                </div>
-                <div class="rating">★ 4.4 <span>(380)</span></div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Product 6 -->
-          <article class="card">
-            <div class="card-image-wrap">
-              <img
-                src="https://images.pexels.com/photos/37347/office-freelancer-computer-business-37347.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Keyboard and mouse"
-              />
-              <span class="badge">Combo</span>
-            </div>
-            <div class="card-body">
-              <h2 class="product-name">Wireless Keyboard &amp; Mouse Set</h2>
-              <div class="product-meta">
-                <div>
-                  <span class="price">₹1,299</span>
-                  <span class="old-price">₹1,799</span>
-                </div>
-                <div class="rating">★ 4.1 <span>(265)</span></div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Product 7 -->
-          <article class="card">
-            <div class="card-image-wrap">
-              <img
-                src="https://images.pexels.com/photos/845451/pexels-photo-845451.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Camera on table"
-              />
-              <span class="badge">Pro</span>
-            </div>
-            <div class="card-body">
-              <h2 class="product-name">Mirrorless Digital Camera Body</h2>
-              <div class="product-meta">
-                <div>
-                  <span class="price">₹39,999</span>
-                  <span class="old-price">₹45,999</span>
-                </div>
-                <div class="rating">★ 4.6 <span>(190)</span></div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Product 8 -->
-          <article class="card">
-            <div class="card-image-wrap">
-              <img
-                src="https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Coffee mug"
-              />
-              <span class="badge">Trending</span>
-            </div>
-            <div class="card-body">
-              <h2 class="product-name">Insulated Ceramic Coffee Mug</h2>
-              <div class="product-meta">
-                <div>
-                  <span class="price">₹399</span>
-                  <span class="old-price">₹599</span>
-                </div>
-                <div class="rating">★ 4.8 <span>(680)</span></div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Product 9 -->
-          <article class="card">
-            <div class="card-image-wrap">
-              <img
-                src="https://images.pexels.com/photos/2736499/pexels-photo-2736499.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Decorative lamp"
-              />
-              <span class="badge">Home</span>
-            </div>
-            <div class="card-body">
-              <h2 class="product-name">Warm LED Decorative Table Lamp</h2>
-              <div class="product-meta">
-                <div>
-                  <span class="price">₹899</span>
-                  <span class="old-price">₹1,299</span>
-                </div>
-                <div class="rating">★ 4.3 <span>(240)</span></div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Product 10 -->
-          <article class="card">
-            <div class="card-image-wrap">
-              <img
-                src="https://images.pexels.com/photos/845434/pexels-photo-845434.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Smartwatch again as variant"
-              />
-              <span class="badge">New Color</span>
-            </div>
-            <div class="card-body">
-              <h2 class="product-name">Smartwatch Sport Edition</h2>
-              <div class="product-meta">
-                <div>
-                  <span class="price">₹3,999</span>
-                  <span class="old-price">₹5,199</span>
-                </div>
-                <div class="rating">★ 4.4 <span>(560)</span></div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Product 11 -->
-          <article class="card">
-            <div class="card-image-wrap">
-              <img
-                src="https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Books and plant"
-              />
-              <span class="badge">Study</span>
-            </div>
-            <div class="card-body">
-              <h2 class="product-name">Hardcover Notebook Pack (Set of 3)</h2>
-              <div class="product-meta">
-                <div>
-                  <span class="price">₹349</span>
-                  <span class="old-price">₹499</span>
-                </div>
-                <div class="rating">★ 4.5 <span>(430)</span></div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Product 12 -->
-          <article class="card">
-            <div class="card-image-wrap">
-              <img
-                src="https://images.pexels.com/photos/845451/pexels-photo-845451.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Camera and lens"
-              />
-              <span class="badge">Bundle</span>
-            </div>
-            <div class="card-body">
-              <h2 class="product-name">Camera &amp; Lens Starter Kit</h2>
-              <div class="product-meta">
-                <div>
-                  <span class="price">₹44,999</span>
-                  <span class="old-price">₹52,999</span>
-                </div>
-                <div class="rating">★ 4.6 <span>(155)</span></div>
-              </div>
-            </div>
-          </article>
-        </section>
+      <main class="main">
+        <div id="root"></div>
       </main>
-
-      <footer>
-        Online image URLs used &mdash; no local image folders required.
-      </footer>
     </div>
+
+    <script type="text/babel">
+
+      const { useState, useEffect } = React;
+
+      /* ALL 12 PRODUCTS WITH YOUR IMAGES */
+      const initialProducts = [
+        { id: 1, name: "Wireless Mouse", price: 799, category: "Electronics", stock: 25,
+          description: "Ergonomic wireless mouse.", isActive: true, image: "images/1.jpg",
+          tags: ["mouse","wireless"] },
+
+        { id: 2, name: "Bluetooth Headphones", price: 2499, category: "Electronics", stock: 10,
+          description: "Noise-isolating headphones.", isActive: true, image: "images/2.jpg",
+          tags: ["audio","music"] },
+
+        { id: 3, name: "Office Chair", price: 5499, category: "Furniture", stock: 5,
+          description: "Comfortable ergonomic office chair.", isActive: true, image: "images/3.jpg",
+          tags: ["work","comfort"] },
+
+        { id: 4, name: "Coffee Mug", price: 299, category: "Kitchen", stock: 40,
+          description: "Ceramic coffee mug.", isActive: true, image: "images/4.jpg",
+          tags: ["mug"] },
+
+        { id: 5, name: "Yoga Mat", price: 999, category: "Sports", stock: 12,
+          description: "Eco-friendly yoga mat.", isActive: true, image: "images/5.jpg",
+          tags: ["fitness"] },
+
+        { id: 6, name: "Laptop Stand", price: 1899, category: "Electronics", stock: 9,
+          description: "Adjustable laptop stand.", isActive: true, image: "images/6.jpg",
+          tags: ["desk"] },
+
+        { id: 7, name: "Water Bottle", price: 499, category: "Sports", stock: 35,
+          description: "Motivational water bottle.", isActive: true, image: "images/7.jpg",
+          tags: ["hydration"] },
+
+        { id: 8, name: "Smartwatch", price: 7999, category: "Electronics", stock: 6,
+          description: "Smartwatch with health tracking.", isActive: true, image: "images/8.jpg",
+          tags: ["smart"] },
+
+        { id: 9, name: "Gaming Keyboard", price: 3999, category: "Electronics", stock: 15,
+          description: "RGB mechanical keyboard.", isActive: true, image: "images/9.jpg",
+          tags: ["gaming","keyboard"] },
+
+        { id: 10, name: "Desk Lamp", price: 1299, category: "Furniture", stock: 22,
+          description: "LED desk lamp.", isActive: true, image: "images/10.jpg",
+          tags: ["lamp"] },
+
+        { id: 11, name: "Running Shoes", price: 2999, category: "Sports", stock: 14,
+          description: "Daily running shoes.", isActive: true, image: "images/11.jpg",
+          tags: ["shoes"] },
+
+        { id: 12, name: "Smart TV", price: 24999, category: "Electronics", stock: 8,
+          description: "43-inch 4K Android Smart TV.", isActive: true, image: "images/12.jpg",
+          tags: ["tv","smart"] },
+      ];
+
+      function StockPill({ stock }) {
+        let cls = "stock-pill ok";
+        let label = `${stock} in stock`;
+
+        if (stock === 0) { cls="stock-pill out"; label="Out of stock"; }
+        else if (stock <= 5) { cls="stock-pill low"; label=`Low (${stock})`; }
+
+        return (
+          <span className={cls}>
+            <span className="status-dot" /> {label}
+          </span>
+        );
+      }
+
+      /* PRODUCT GRID */
+      function ProductGrid({ items, onEdit, onOpenDetail }) {
+        return (
+          <div className="grid">
+            {items.map(p => (
+              <div className="product-card" key={p.id} onClick={() => onOpenDetail(p)}>
+                <img src={p.image} className="product-image" alt={p.name} />
+
+                <div className="product-body">
+                  <div className="product-category">{p.category}</div>
+                  <div className="product-name">{p.name}</div>
+
+                  <div className="product-meta">
+                    <div className="product-price">₹{p.price}</div>
+                    <div className="product-stock-label">{p.stock > 0 ? `${p.stock} left` : "Out"}</div>
+                  </div>
+
+                  <div className="product-footer">
+                    <div className="tag-row">
+                      {p.tags.map(t => (<span key={t} className="tag-pill">#{t}</span>))}
+                    </div>
+
+                    <button
+                      className="edit-pill"
+                      onClick={(e)=>{ e.stopPropagation(); onEdit(p); }}
+                    >
+                      ✏ Edit
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      }
+
+      /* DETAIL FULL SCREEN PANEL */
+      function ProductDetailSheet({ product, onClose }) {
+        if (!product) return null;
+
+        return (
+          <div className="detail-backdrop" onClick={onClose}>
+            <div className="detail-panel" onClick={(e)=>e.stopPropagation()}>
+
+              <div className="detail-header">
+                <h2 className="detail-title">{product.name}</h2>
+                <button className="edit-pill" onClick={onClose}>Close</button>
+              </div>
+
+              <div className="product-category">{product.category}</div>
+
+              <div className="detail-image-wrap">
+                <img src={product.image} className="detail-image" alt={product.name}/>
+              </div>
+
+              <div className="detail-row">
+                <div className="detail-price">₹{product.price}</div>
+                <StockPill stock={product.stock}/>
+              </div>
+
+              <h3 className="detail-section-title">Description</h3>
+              <p className="detail-description">{product.description}</p>
+
+              <h3 className="detail-section-title">Tags</h3>
+              <div className="detail-tags">
+                {product.tags.map(t => <span key={t} className="tag-pill">#{t}</span>)}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      /* APP */
+      function App() {
+
+        const [products, setProducts] = useState(initialProducts);
+        const [view, setView] = useState("grid");
+        const [search, setSearch] = useState("");
+        const [detailProduct, setDetailProduct] = useState(null);
+
+        const filtered = products.filter(p =>
+          p.name.toLowerCase().includes(search.toLowerCase())
+        );
+
+        return (
+          <>
+            <div className="header-top">
+              <div className="welcome-block">
+                <h1>
+                  Welcome back, Srineth
+                  <span className="welcome-pill">Gamyam Assignment</span>
+                </h1>
+              </div>
+
+              <div className="header-controls">
+                <div className="search-wrap">
+                  <span className="search-icon">🔍</span>
+                  <input
+                    placeholder="Search products..."
+                    value={search}
+                    onChange={(e)=>setSearch(e.target.value)}
+                  />
+                </div>
+
+                <div className="toggle-group">
+                  <button
+                    className={"toggle-btn " + (view==="grid"?"active":"")}
+                    onClick={()=>setView("grid")}
+                  >
+                    🧩 Grid
+                  </button>
+
+                  <button
+                    className={"toggle-btn " + (view==="list"?"active":"")}
+                    onClick={()=>setView("list")}
+                  >
+                    📋 List
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="dashboard-shell">
+
+              <section className="card">
+                <div className="card-header"><h2>Products</h2></div>
+
+                {view === "grid" ? (
+                  <ProductGrid
+                    items={filtered}
+                    onEdit={()=>{}}
+                    onOpenDetail={setDetailProduct}
+                  />
+                ) : (
+                  <p>List view disabled for now</p>
+                )}
+              </section>
+
+              <section className="card">
+                <div className="card-header"><h2>Snapshot</h2></div>
+
+                <p>Total Products: {products.length}</p>
+                <p>Active Products: {products.filter(p=>p.isActive).length}</p>
+              </section>
+
+            </div>
+
+            {detailProduct && (
+              <ProductDetailSheet
+                product={detailProduct}
+                onClose={()=>setDetailProduct(null)}
+              />
+            )}
+
+          </>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
   </body>
 </html>
