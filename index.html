@@ -74,6 +74,17 @@
         font-weight: 700;
         color: white;
         font-size: 20px;
+        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.5);
+      }
+
+      .brand-text-main {
+        font-weight: 600;
+        font-size: 15px;
+      }
+
+      .brand-text-sub {
+        font-size: 12px;
+        color: var(--text-muted);
       }
 
       .nav {
@@ -92,7 +103,7 @@
         align-items: center;
         gap: 8px;
         cursor: pointer;
-        transition: 0.18s ease;
+        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
       }
 
       .nav-item:hover {
@@ -151,6 +162,15 @@
         border-radius: 999px;
         border: 1px solid var(--border-subtle);
         font-size: 13px;
+        outline: none;
+        background: #f9fafb;
+        transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .search-wrap input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.18);
+        background: #ffffff;
       }
 
       .search-icon {
@@ -176,11 +196,13 @@
         border-radius: 999px;
         font-size: 12px;
         cursor: pointer;
+        transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
       }
 
       .toggle-btn.active {
         background: white;
         box-shadow: 0 1px 4px rgba(15, 23, 42, 0.12);
+        transform: translateY(-1px);
       }
 
       .primary-btn {
@@ -193,6 +215,15 @@
         align-items: center;
         gap: 6px;
         cursor: pointer;
+        font-size: 13px;
+        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35);
+        transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+      }
+
+      .primary-btn:hover {
+        transform: translateY(-1px) scale(1.01);
+        box-shadow: 0 14px 30px rgba(16, 185, 129, 0.5);
+        opacity: 0.98;
       }
 
       /* Cards */
@@ -208,14 +239,27 @@
         padding: 14px;
         box-shadow: var(--shadow-soft);
         border: 1px solid rgba(148, 163, 184, 0.18);
+        position: relative;
+        overflow: hidden;
       }
 
-      /* Grid Cards */
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+
+      .card-header h2 {
+        font-size: 15px;
+      }
+
+      /* Grid */
       .grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
         gap: 10px;
-        margin-top: 4px;
+        margin-top: 6px;
       }
 
       .product-card {
@@ -223,22 +267,30 @@
         border-radius: 14px;
         overflow: hidden;
         border: 1px solid #e5e7eb;
-        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
         display: flex;
         flex-direction: column;
         cursor: pointer;
-        transition: 0.16s ease;
+        transition: transform 0.22s ease, box-shadow 0.22s ease,
+          border-color 0.22s ease;
+        transform-origin: center;
       }
 
       .product-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 16px 28px rgba(15, 23, 42, 0.18);
+        transform: translateY(-4px) scale(1.01);
+        box-shadow: 0 16px 28px rgba(15, 23, 42, 0.16);
+        border-color: rgba(16, 185, 129, 0.4);
       }
 
       .product-image {
         width: 100%;
         height: 115px;
         object-fit: cover;
+        transition: transform 0.25s ease;
+      }
+
+      .product-card:hover .product-image {
+        transform: scale(1.04);
       }
 
       .product-body {
@@ -252,6 +304,7 @@
         font-size: 11px;
         text-transform: uppercase;
         color: var(--text-muted);
+        letter-spacing: 0.04em;
       }
 
       .product-name {
@@ -263,6 +316,23 @@
         display: flex;
         justify-content: space-between;
         font-size: 12px;
+        margin-top: 2px;
+      }
+
+      .product-price {
+        font-weight: 600;
+      }
+
+      .product-stock-label {
+        font-size: 11px;
+        color: var(--text-muted);
+      }
+
+      .product-footer {
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
 
       .tag-row {
@@ -287,9 +357,92 @@
         background: #ecfdf5;
         color: var(--primary-dark);
         cursor: pointer;
+        transition: background 0.2s ease, transform 0.15s ease,
+          box-shadow 0.15s ease;
+        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.15);
       }
 
-      /* Full screen detail sheet */
+      .edit-pill:hover {
+        background: #d1fae5;
+        transform: translateY(-1px);
+      }
+
+      /* Stock pill */
+      .stock-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: #1d4ed8;
+      }
+
+      .stock-pill.low {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      .stock-pill.out {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+
+      .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: currentColor;
+      }
+
+      /* Pagination */
+      .pagination-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .page-info {
+        font-size: 12px;
+      }
+
+      .page-controls {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+
+      .page-btn {
+        border-radius: 999px;
+        border: 1px solid var(--border-subtle);
+        padding: 4px 10px;
+        background: #ffffff;
+        font-size: 12px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: background 0.2s ease, transform 0.15s ease,
+          box-shadow 0.15s ease, border-color 0.15s ease;
+      }
+
+      .page-btn:hover:not(:disabled) {
+        background: #f9fafb;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+      }
+
+      .page-btn:disabled {
+        cursor: default;
+        opacity: 0.45;
+        box-shadow: none;
+      }
+
+      /* Detail full screen sheet */
       .detail-backdrop {
         position: fixed;
         inset: 0;
@@ -312,12 +465,168 @@
         overflow-y: auto;
       }
 
+      .detail-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 4px;
+      }
+
+      .detail-title {
+        font-size: 18px;
+      }
+
+      .detail-image-wrap {
+        margin: 10px 0;
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid var(--border-subtle);
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18);
+      }
+
+      .detail-image {
+        width: 100%;
+        height: 210px;
+        object-fit: cover;
+      }
+
+      .detail-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 6px;
+        margin-bottom: 10px;
+      }
+
+      .detail-price {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .detail-section-title {
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 10px;
+        margin-bottom: 3px;
+      }
+
+      .detail-description {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .detail-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 2px;
+      }
+
+      .detail-footer-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 14px;
+      }
+
+      .detail-nav-btn {
+        border-radius: 999px;
+        border: 1px solid var(--border-subtle);
+        padding: 5px 10px;
+        font-size: 12px;
+        background: #f9fafb;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .detail-nav-btn:hover:not(:disabled) {
+        background: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+      }
+
+      .detail-nav-btn:disabled {
+        opacity: 0.4;
+        cursor: default;
+        box-shadow: none;
+      }
+
       @keyframes slideUpSheet {
         from {
           transform: translateY(100%);
         }
         to {
           transform: translateY(0%);
+        }
+      }
+
+      /* Loading skeletons */
+      .skeleton-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 10px;
+        margin-top: 6px;
+      }
+
+      .skeleton-card {
+        background: #ffffff;
+        border-radius: 14px;
+        padding-bottom: 8px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+        overflow: hidden;
+      }
+
+      .skeleton-image {
+        height: 115px;
+        background: linear-gradient(
+          90deg,
+          #e5e7eb 0%,
+          #f3f4f6 50%,
+          #e5e7eb 100%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.2s infinite;
+      }
+
+      .skeleton-lines {
+        padding: 8px 9px 9px;
+      }
+
+      .skeleton-line {
+        height: 8px;
+        border-radius: 999px;
+        margin-bottom: 6px;
+        background: linear-gradient(
+          90deg,
+          #e5e7eb 0%,
+          #f3f4f6 50%,
+          #e5e7eb 100%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.2s infinite;
+      }
+
+      .skeleton-line.short {
+        width: 40%;
+      }
+
+      .skeleton-line.medium {
+        width: 70%;
+      }
+
+      .skeleton-line.full {
+        width: 100%;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
         }
       }
 
@@ -365,7 +674,6 @@
     </div>
 
     <script type="text/babel">
-
       const { useState, useEffect } = React;
 
       /* ALL 12 PRODUCTS WITH YOUR IMAGES */
@@ -420,11 +728,11 @@
       ];
 
       function StockPill({ stock }) {
-        let cls = "stock-pill ok";
+        let cls = "stock-pill";
         let label = `${stock} in stock`;
 
-        if (stock === 0) { cls="stock-pill out"; label="Out of stock"; }
-        else if (stock <= 5) { cls="stock-pill low"; label=`Low (${stock})`; }
+        if (stock === 0) { cls = "stock-pill out"; label = "Out of stock"; }
+        else if (stock <= 5) { cls = "stock-pill low"; label = `Low (${stock})`; }
 
         return (
           <span className={cls}>
@@ -434,7 +742,26 @@
       }
 
       /* PRODUCT GRID */
-      function ProductGrid({ items, onEdit, onOpenDetail }) {
+      function ProductGrid({ items, onEdit, onOpenDetail, isLoading }) {
+        if (isLoading) {
+          // Show skeleton loading cards
+          const skeletons = Array.from({ length: 6 });
+          return (
+            <div className="skeleton-grid">
+              {skeletons.map((_, idx) => (
+                <div className="skeleton-card" key={idx}>
+                  <div className="skeleton-image" />
+                  <div className="skeleton-lines">
+                    <div className="skeleton-line short" />
+                    <div className="skeleton-line medium" />
+                    <div className="skeleton-line full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        }
+
         return (
           <div className="grid">
             {items.map(p => (
@@ -447,7 +774,9 @@
 
                   <div className="product-meta">
                     <div className="product-price">₹{p.price}</div>
-                    <div className="product-stock-label">{p.stock > 0 ? `${p.stock} left` : "Out"}</div>
+                    <div className="product-stock-label">
+                      {p.stock > 0 ? `${p.stock} left` : "Out"}
+                    </div>
                   </div>
 
                   <div className="product-footer">
@@ -470,13 +799,12 @@
       }
 
       /* DETAIL FULL SCREEN PANEL */
-      function ProductDetailSheet({ product, onClose }) {
+      function ProductDetailSheet({ product, onClose, onNext, onPrev, hasNext, hasPrev }) {
         if (!product) return null;
 
         return (
           <div className="detail-backdrop" onClick={onClose}>
             <div className="detail-panel" onClick={(e)=>e.stopPropagation()}>
-
               <div className="detail-header">
                 <h2 className="detail-title">{product.name}</h2>
                 <button className="edit-pill" onClick={onClose}>Close</button>
@@ -500,6 +828,23 @@
               <div className="detail-tags">
                 {product.tags.map(t => <span key={t} className="tag-pill">#{t}</span>)}
               </div>
+
+              <div className="detail-footer-nav">
+                <button
+                  className="detail-nav-btn"
+                  onClick={onPrev}
+                  disabled={!hasPrev}
+                >
+                  ⬅ Prev
+                </button>
+                <button
+                  className="detail-nav-btn"
+                  onClick={onNext}
+                  disabled={!hasNext}
+                >
+                  Next ➡
+                </button>
+              </div>
             </div>
           </div>
         );
@@ -507,15 +852,58 @@
 
       /* APP */
       function App() {
-
         const [products, setProducts] = useState(initialProducts);
         const [view, setView] = useState("grid");
         const [search, setSearch] = useState("");
         const [detailProduct, setDetailProduct] = useState(null);
 
+        const [isLoading, setIsLoading] = useState(true);
+        const [currentPage, setCurrentPage] = useState(1);
+        const pageSize = 6;
+
+        useEffect(() => {
+          // Simulate loading
+          const t = setTimeout(() => setIsLoading(false), 700);
+          return () => clearTimeout(t);
+        }, []);
+
+        // Reset to page 1 when search changes
+        useEffect(() => {
+          setCurrentPage(1);
+        }, [search]);
+
         const filtered = products.filter(p =>
           p.name.toLowerCase().includes(search.toLowerCase())
         );
+
+        const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+        const safePage = Math.min(currentPage, totalPages);
+        const startIndex = (safePage - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const paginated = filtered.slice(startIndex, endIndex);
+
+        // Detail navigation (Next / Prev in sheet)
+        const detailIndex = detailProduct
+          ? filtered.findIndex(p => p.id === detailProduct.id)
+          : -1;
+        const hasPrev = detailIndex > 0;
+        const hasNext = detailIndex >= 0 && detailIndex < filtered.length - 1;
+
+        const handleNextDetail = () => {
+          if (!hasNext) return;
+          const nextProduct = filtered[detailIndex + 1];
+          if (nextProduct) setDetailProduct(nextProduct);
+        };
+
+        const handlePrevDetail = () => {
+          if (!hasPrev) return;
+          const prevProduct = filtered[detailIndex - 1];
+          if (prevProduct) setDetailProduct(prevProduct);
+        };
+
+        const handleOpenDetail = (product) => {
+          setDetailProduct(product);
+        };
 
         return (
           <>
@@ -539,54 +927,94 @@
 
                 <div className="toggle-group">
                   <button
-                    className={"toggle-btn " + (view==="grid"?"active":"")}
+                    className={"toggle-btn " + (view==="grid" ? "active" : "")}
                     onClick={()=>setView("grid")}
                   >
                     🧩 Grid
                   </button>
 
                   <button
-                    className={"toggle-btn " + (view==="list"?"active":"")}
+                    className={"toggle-btn " + (view==="list" ? "active" : "")}
                     onClick={()=>setView("list")}
                   >
                     📋 List
                   </button>
                 </div>
+
+                <button className="primary-btn">
+                  ➕ Add Product
+                </button>
               </div>
             </div>
 
             <div className="dashboard-shell">
-
               <section className="card">
-                <div className="card-header"><h2>Products</h2></div>
+                <div className="card-header">
+                  <h2>Products</h2>
+                </div>
 
                 {view === "grid" ? (
-                  <ProductGrid
-                    items={filtered}
-                    onEdit={()=>{}}
-                    onOpenDetail={setDetailProduct}
-                  />
+                  <>
+                    <ProductGrid
+                      items={paginated}
+                      onEdit={()=>{}}
+                      onOpenDetail={handleOpenDetail}
+                      isLoading={isLoading}
+                    />
+
+                    {!isLoading && (
+                      <div className="pagination-bar">
+                        <div className="page-info">
+                          Showing{" "}
+                          {filtered.length === 0 ? 0 : startIndex + 1}
+                          {" - "}
+                          {Math.min(endIndex, filtered.length)} of {filtered.length} products
+                        </div>
+                        <div className="page-controls">
+                          <button
+                            className="page-btn"
+                            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                            disabled={safePage === 1}
+                          >
+                            ⬅ Prev
+                          </button>
+                          <span>Page {safePage} / {totalPages}</span>
+                          <button
+                            className="page-btn"
+                            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                            disabled={safePage === totalPages}
+                          >
+                            Next ➡
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <p>List view disabled for now</p>
                 )}
               </section>
 
               <section className="card">
-                <div className="card-header"><h2>Snapshot</h2></div>
+                <div className="card-header">
+                  <h2>Snapshot</h2>
+                </div>
 
                 <p>Total Products: {products.length}</p>
                 <p>Active Products: {products.filter(p=>p.isActive).length}</p>
               </section>
-
             </div>
 
             {detailProduct && (
               <ProductDetailSheet
                 product={detailProduct}
                 onClose={()=>setDetailProduct(null)}
+                onNext={handleNextDetail}
+                onPrev={handlePrevDetail}
+                hasNext={hasNext}
+                hasPrev={hasPrev}
               />
             )}
-
           </>
         );
       }
