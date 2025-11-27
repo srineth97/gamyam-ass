@@ -254,7 +254,7 @@
         font-size: 15px;
       }
 
-      /* Grid */
+      /* GRID VIEW */
       .grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -365,6 +365,75 @@
       .edit-pill:hover {
         background: #d1fae5;
         transform: translateY(-1px);
+      }
+
+      /* LIST VIEW */
+      .list-view {
+        overflow-x: auto;
+        margin-top: 8px;
+      }
+
+      .list-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 14px;
+        overflow: hidden;
+        font-size: 13px;
+      }
+
+      .list-table th {
+        text-align: left;
+        padding: 10px;
+        background: #f3f4f6;
+        font-weight: 600;
+        font-size: 12px;
+        color: #4b5563;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .list-table td {
+        padding: 10px;
+        border-bottom: 1px solid #f0f0f0;
+      }
+
+      .list-table tr {
+        cursor: pointer;
+        transition: background 0.18s ease;
+      }
+
+      .list-table tr:hover {
+        background: #f9fafb;
+      }
+
+      .list-product-cell {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .list-thumb {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        object-fit: cover;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .list-tags {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+
+      .stock-ok {
+        color: #059669;
+        font-weight: 600;
+      }
+
+      .stock-out {
+        color: #b91c1c;
+        font-weight: 600;
       }
 
       /* Stock pill */
@@ -744,7 +813,6 @@
       /* PRODUCT GRID */
       function ProductGrid({ items, onEdit, onOpenDetail, isLoading }) {
         if (isLoading) {
-          // Show skeleton loading cards
           const skeletons = Array.from({ length: 6 });
           return (
             <div className="skeleton-grid">
@@ -794,6 +862,70 @@
                 </div>
               </div>
             ))}
+          </div>
+        );
+      }
+
+      /* LIST VIEW */
+      function ListView({ items, onOpenDetail, onEdit, isLoading }) {
+        if (isLoading) {
+          return <p style={{ padding: "10px", fontSize: "13px", color: "#6b7280" }}>Loading products…</p>;
+        }
+
+        return (
+          <div className="list-view">
+            <table className="list-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Tags</th>
+                  <th>Edit</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {items.map(p => (
+                  <tr key={p.id} onClick={() => onOpenDetail(p)}>
+                    <td className="list-product-cell">
+                      <img src={p.image} alt={p.name} className="list-thumb" />
+                      <span>{p.name}</span>
+                    </td>
+
+                    <td>{p.category}</td>
+                    <td>₹{p.price}</td>
+
+                    <td>
+                      {p.stock > 0 ? (
+                        <span className="stock-ok">{p.stock}</span>
+                      ) : (
+                        <span className="stock-out">Out</span>
+                      )}
+                    </td>
+
+                    <td>
+                      <div className="list-tags">
+                        {p.tags.map(t => <span key={t} className="tag-pill">#{t}</span>)}
+                      </div>
+                    </td>
+
+                    <td>
+                      <button
+                        className="edit-pill"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEdit(p);
+                        }}
+                      >
+                        ✏ Edit
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         );
       }
@@ -862,12 +994,10 @@
         const pageSize = 6;
 
         useEffect(() => {
-          // Simulate loading
           const t = setTimeout(() => setIsLoading(false), 700);
           return () => clearTimeout(t);
         }, []);
 
-        // Reset to page 1 when search changes
         useEffect(() => {
           setCurrentPage(1);
         }, [search]);
@@ -882,7 +1012,6 @@
         const endIndex = startIndex + pageSize;
         const paginated = filtered.slice(startIndex, endIndex);
 
-        // Detail navigation (Next / Prev in sheet)
         const detailIndex = detailProduct
           ? filtered.findIndex(p => p.id === detailProduct.id)
           : -1;
@@ -954,44 +1083,47 @@
                 </div>
 
                 {view === "grid" ? (
-                  <>
-                    <ProductGrid
-                      items={paginated}
-                      onEdit={()=>{}}
-                      onOpenDetail={handleOpenDetail}
-                      isLoading={isLoading}
-                    />
-
-                    {!isLoading && (
-                      <div className="pagination-bar">
-                        <div className="page-info">
-                          Showing{" "}
-                          {filtered.length === 0 ? 0 : startIndex + 1}
-                          {" - "}
-                          {Math.min(endIndex, filtered.length)} of {filtered.length} products
-                        </div>
-                        <div className="page-controls">
-                          <button
-                            className="page-btn"
-                            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                            disabled={safePage === 1}
-                          >
-                            ⬅ Prev
-                          </button>
-                          <span>Page {safePage} / {totalPages}</span>
-                          <button
-                            className="page-btn"
-                            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                            disabled={safePage === totalPages}
-                          >
-                            Next ➡
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </>
+                  <ProductGrid
+                    items={paginated}
+                    onEdit={()=>{}}
+                    onOpenDetail={handleOpenDetail}
+                    isLoading={isLoading}
+                  />
                 ) : (
-                  <p>List view disabled for now</p>
+                  <ListView
+                    items={paginated}
+                    onEdit={()=>{}}
+                    onOpenDetail={handleOpenDetail}
+                    isLoading={isLoading}
+                  />
+                )}
+
+                {!isLoading && (
+                  <div className="pagination-bar">
+                    <div className="page-info">
+                      Showing{" "}
+                      {filtered.length === 0 ? 0 : startIndex + 1}
+                      {" - "}
+                      {Math.min(endIndex, filtered.length)} of {filtered.length} products
+                    </div>
+                    <div className="page-controls">
+                      <button
+                        className="page-btn"
+                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                        disabled={safePage === 1}
+                      >
+                        ⬅ Prev
+                      </button>
+                      <span>Page {safePage} / {totalPages}</span>
+                      <button
+                        className="page-btn"
+                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                        disabled={safePage === totalPages}
+                      >
+                        Next ➡
+                      </button>
+                    </div>
+                  </div>
                 )}
               </section>
 
